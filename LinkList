@@ -1,0 +1,151 @@
+class Node(object):
+    def __init__(self,data):
+        self.data = data
+        self.next = None
+        
+    def getData(self):
+        return self.data
+
+    def getNext(self):
+        return self.next
+
+    def setData(self,newdata):
+        self.data = newdata
+
+    def setNext(self,newnext):
+        self.next = newnext
+
+        
+class LinkList(object):
+    ##  initialise link list
+    ##  head of L is none
+    
+    def __init__(self):
+        self.head = None
+
+    def is_empty(self):
+        ##  return true or false
+        return self.head == None
+
+    def add(self,data):
+        ##  add element to the tail
+        s = Node(data)
+        if self.head == None:
+            s.setNext(self.head)
+            self.head = s
+        else:
+            current =self.head
+            while current.next != None:
+                current = current.getNext()
+            current.setNext(s)
+            
+    def add_head(self,data):
+        ##  add element from head
+        s = Node(data)
+        s.setNext(self.head)
+        self.head = s
+
+    def size(self):
+        current = self.head
+        count = 0
+        while current != None:
+            current = current.getNext()
+            count = count + 1
+        return count
+    
+    def search(self,item):
+        ##  1.travesal the list to check if the item in the list
+        ##  2.if existed, set the found to True
+        
+        current = self.head
+        found = False
+        while current != None and not found:
+            if current.getData()==item:
+                found = True
+            else:
+                current = current.getNext()
+
+        return found
+
+    def remove(self,item):
+        ##  1.search the item in the list.
+        ##  2.link the next node to the previous node.(skip the removed node)
+        
+        current = self.head
+        previous = None
+        found = False
+        while not found and current != None:
+            if current.getData()==item:
+                found = True
+            else:
+                previous = current
+                current = current.getNext()
+        ##  if previous is None, which means the first element is removed,
+        ##  so we set the head with the next node.
+
+        if found == False:
+            return "Not found"
+        
+        if previous == None:
+            self.head = current.getNext()
+        else:
+            previous.setNext(current.getNext())
+            
+    def _print(self):
+        current = self.head
+        count = 0
+        while current != None:
+            print(current.getData())
+            current = current.getNext()
+
+    def insert(self,item,i):
+        ##  i-1 is the real location in L
+        ##  all the elements after the i-1 are needed to move forward
+        j = 0
+        current = self.head
+        previous = None
+        while current != None and j!=i:
+            previous = current
+            current = current.getNext()
+            j = j+1
+        
+        if current == None:
+            return "Wrong"
+        new_node = Node(item)
+        
+        previous.setNext(new_node)
+        new_node.setNext(current)
+
+    def reverse_list(self):
+        new_head = None
+        while self.head is not None:
+            self.head.next, self.head, new_head = new_head, self.head.next, self.head # look Ma, no temp vars!
+
+##            temp = self.head
+##            # temp is a reference to a node we're moving from one list to the other
+##            self.head = temp.getNext()
+##            # the first two assignments pop the node off the front of the list
+##            temp.setNext(new_head)
+##            # the next two make it the new head of the reversed list
+##            new_head = temp
+
+        self.head = new_head
+
+
+        
+    def reverse(self):
+        current = self.head
+        previous = None
+        next = None
+        
+        while current:
+            next = current.next
+            current.next = previous   # None, first time round.
+            previous = current        # Used in the next iteration.
+            current = next            # Move to next node.
+
+        self.head = previous
+            
+        
+    
+
